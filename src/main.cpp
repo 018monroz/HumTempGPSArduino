@@ -256,16 +256,8 @@ void loop()
     //Serial.println();
     //Serial.println();
 
-    //Envío Paquete. Se envían los datos vigentes de temperatura y humedad.
-
-    Serial.println("Longitud");
-    Serial.println(longitud);
-    Serial.println("Latitud");
-    Serial.println(latitud);
-    print_date(gps);
-    Serial.println();
-    Serial.println();
-    Serial.println();
+    //Envío Paquete.
+    EnvioGPS();
 
     //Obtención de datos
 
@@ -276,7 +268,7 @@ void loop()
 
   }
   
-  if(countT == 3){ //30 segundos, se envía H, T y GPS.
+  if(countT == 3){ //30 segundos, se envía H, T
 
 
 
@@ -296,10 +288,7 @@ void loop()
   temperaturaEnv = temperaturaSum/3.0;
   humedadEnv = humedadSum/3.0;
 
-  Serial.println("\nHumedad:");
-  Serial.println(humedadEnv);
-  Serial.println("Temperatura:");
-  Serial.println(temperaturaEnv);
+  EnvioHumedadyTemperatura();
 
   countT = 0;
   

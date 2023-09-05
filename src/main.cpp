@@ -13,7 +13,7 @@ const char* password = "";
 
 //poner la direccion IP del servidor
 
-const char* server = " 54.225.72.244";
+const char* server = "54.81.160.197";
 
 /* This sample code demonstrates the normal use of a TinyGPS object.
    It requires the use of SoftwareSerial, and assumes that you have a
@@ -49,6 +49,8 @@ static void print_float(float val, float invalid, int len, int prec);
 static void print_int(unsigned long val, unsigned long invalid, int len);
 static void print_date(TinyGPS &gps);
 static void print_str(const char *str, int len);
+static String fecha();
+static String hora();
 
 /*static void sendthingspeak()
 {
@@ -105,7 +107,7 @@ static void EnvioHumedadyTemperatura()
 
   Serial.println("datos para enviar");
 
-  PostData = String("{\"id\":"+String(id)+", \"temperatura\":"+String(temperaturaEnv,7)+", \"humedad\":"+String(humedadEnv,7)+"}");
+  PostData = String("{\"id\":\"000420108\", \"temperatura\":\""+String(temperaturaEnv,7)+"\", \"humedad\":\""+String(humedadEnv,7)+"\"}");
 
   Serial.println(PostData);
 
@@ -119,11 +121,11 @@ static void EnvioHumedadyTemperatura()
 
     // poner la direccion IP del servidor ​
 
-    client.print("Host:  54.225.72.244 \n"); //Serv destino
+    client.print("Host:  54.81.160.197 \n"); //Serv destino
 
-    //client.println("User-Agent: Arduino/1.0");
+    client.println("User-Agent: Arduino/1.0");
 
-    //client.println("Connection: close");
+    client.println("Connection: close");
 
     client.println("Content-Type: application/json;"); //Formato
 
@@ -150,7 +152,7 @@ static void EnvioGPS()
 
   Serial.println("datos para enviar");
 
-  PostData = String("{\"id\":"+String(id)+", \"latitud\":"+String(latitud,7)+", \"longitud\":"+String(longitud,7)+", \"fecha\":"+fecha()+", \"hora\":"+hora()+"}");
+PostData = String("{\"id\":\"000420108\", \"latitud\":\""+String(latitud,7)+"\", \"longitud\":\""+String(longitud,7)+"\"}");
 
   Serial.println(PostData);
 
@@ -164,11 +166,11 @@ static void EnvioGPS()
 
     // poner la direccion IP del servidor ​
 
-    client.print("Host:  54.225.72.244 \n"); //Serv destino
+    client.print("Host:  54.81.160.197 \n"); //Serv destino
 
-    //client.println("User-Agent: Arduino/1.0");
+    client.println("User-Agent: Arduino/1.0");
 
-    //client.println("Connection: close");
+    client.println("Connection: close");
 
     client.println("Content-Type: application/json;"); //Formato
 
@@ -195,24 +197,22 @@ void setup()
   sensor.begin(0x40);
 
   delay(10);
-
   Serial.println();
-
   Serial.println();
 
   Serial.print("Connecting to ");
 
   Serial.println(ssid);
 
-//WiFi.begin(ssid, password);
+WiFi.begin(ssid, password);
 
-/*while (WiFi.status() != WL_CONNECTED) {
+while (WiFi.status() != WL_CONNECTED) {
 
     delay(500);
 
     Serial.print(".");
 
-  }*/
+  }
 
  Serial.println("");
 
@@ -241,20 +241,11 @@ void loop()
 
 
   if(countGPS > 100){ //Se envia GPS
+
     gps.f_get_position(&flat, &flon, &age);
-    //Serial.println("\nLATITUD:");
-    //print_float(flat, TinyGPS::GPS_INVALID_F_ANGLE, 10, 6);
     latitud = flat;
-    //Serial.println("\nLONGITUD:");
-    //print_float(flon, TinyGPS::GPS_INVALID_F_ANGLE, 11, 6);
     longitud = flon;
-    //Serial.println("\nFECHA:");
-    //print_date(gps);
-    //Serial.println("\nALTITUD:");
-    //print_float(gps.f_altitude(), TinyGPS::GPS_INVALID_F_ALTITUDE, 7, 2);
-    //Serial.println();
-    //Serial.println();
-    //Serial.println();
+
 
     //Envío Paquete.
     EnvioGPS();
@@ -270,20 +261,6 @@ void loop()
   
   if(countT == 3){ //30 segundos, se envía H, T
 
-
-
-    /*Serial.println("\nHUMEDAD A ENVIAR:\n");
-    Serial.println(sensor.readHumidity());
-    Serial.println("\nTEMPERATURA:\n");
-    Serial.println();
-    temperaturaEnv = sensor.readTemperature();
-
-    countT = 0;
-    countH = 0;
-    countGPS = 0;
-    //sendthingspeak();
-    */
-
   //Prunning:
   temperaturaEnv = temperaturaSum/3.0;
   humedadEnv = humedadSum/3.0;
@@ -293,7 +270,8 @@ void loop()
   countT = 0;
   
   //Se actualizan los datos de temperatura y humedad.
-
+  temperaturaSum = 0;
+  humedadSum = 0;
 
   }
 

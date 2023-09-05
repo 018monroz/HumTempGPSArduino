@@ -143,6 +143,51 @@ static void EnvioHumedadyTemperatura()
 
 }
 
+static void EnvioGPS()
+{
+
+  String PostData = "";
+
+  Serial.println("datos para enviar");
+
+  PostData = String("{\"id\":"+String(id)+", \"latitud\":"+String(latitud,7)+", \"longitud\":"+String(longitud,7)+", \"fecha\":"+fecha()+", \"hora\":"+hora()+"}");
+
+  Serial.println(PostData);
+
+  if (client.connect(server,80))
+
+  {
+
+    Serial.println("conectado");
+
+    client.print("POST /sensor HTTP/1.1\n");
+
+    // poner la direccion IP del servidor ​
+
+    client.print("Host:  54.225.72.244 \n"); //Serv destino
+
+    //client.println("User-Agent: Arduino/1.0");
+
+    //client.println("Connection: close");
+
+    client.println("Content-Type: application/json;"); //Formato
+
+    client.print("Content-Length: ");
+
+    client.println(PostData.length());
+
+    client.println();
+
+    client.println(PostData);
+
+  } else {
+
+    Serial.println("error de conexion");
+
+  }
+}
+
+
 void setup()
 { 
   Serial.begin(115200);
@@ -330,6 +375,22 @@ static void print_date(TinyGPS &gps)
   }
   print_int(age, TinyGPS::GPS_INVALID_AGE, 5);
   smartdelay(0);
+}
+
+static String fecha(){
+  int year;
+  byte month, day, hour, minute, second, hundredths;
+  unsigned long age;
+  gps.crack_datetime(&year, &month, &day, &hour, &minute, &second, &hundredths, &age);
+  return ""+String(day)+"/"+String(month)+"/"+String(year);
+}
+
+static String hora(){
+  int year;
+  byte month, day, hour, minute, second, hundredths;
+  unsigned long age;
+  gps.crack_datetime(&year, &month, &day, &hour, &minute, &second, &hundredths, &age);
+  return ""+String(hour)+":"+String(minute)+":"+String(second);
 }
 
 static void print_str(const char *str, int len)

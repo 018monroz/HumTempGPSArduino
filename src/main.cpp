@@ -13,7 +13,7 @@ const char* password = "";
 
 //poner la direccion IP del servidor
 
-const char* server = "54.81.160.197";
+const char* server = "54.225.72.244";
 
 /* This sample code demonstrates the normal use of a TinyGPS object.
    It requires the use of SoftwareSerial, and assumes that you have a
@@ -100,7 +100,7 @@ static String hora();
 
 
 //Formato mensaje a cambiar según requerimientos del servidor.
-static void EnvioHumedadyTemperatura()
+static void EnvioHumedadyTemperatura() 
 {
 
   String PostData = "";
@@ -117,11 +117,11 @@ static void EnvioHumedadyTemperatura()
 
     Serial.println("conectado");
 
-    client.print("POST /sensor HTTP/1.1\n");
+    client.print("POST /datos HTTP/1.1\n");
 
     // poner la direccion IP del servidor ​
 
-    client.print("Host:  54.81.160.197 \n"); //Serv destino
+    client.print("Host:  54.225.72.244 \n"); //Serv destino
 
     client.println("User-Agent: Arduino/1.0");
 
@@ -162,11 +162,11 @@ PostData = String("{\"id\":\"000420108\", \"latitud\":\""+String(latitud,7)+"\",
 
     Serial.println("conectado");
 
-    client.print("POST /sensor HTTP/1.1\n");
+    client.print("POST /datos HTTP/1.1\n");
 
     // poner la direccion IP del servidor ​
 
-    client.print("Host:  54.81.160.197 \n"); //Serv destino
+    client.print("Host:  54.225.72.244 \n"); //Serv destino
 
     client.println("User-Agent: Arduino/1.0");
 
